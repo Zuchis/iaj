@@ -33,7 +33,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.NavMeshGraph = graph;
             this.Open = open;
             this.Closed = closed;
-            this.NodesPerSearch = uint.MaxValue; //by default we process all nodes in a single request
+            //this.NodesPerSearch = uint.MaxValue; //by default we process all nodes in a single request
+            this.NodesPerSearch = 15;
             this.InProgress = false;
             this.Heuristic = heuristic;
         }
@@ -59,10 +60,14 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalProcessingTime = 0.0f;
             this.MaxOpenNodes = 0;
 
+            //another method to solve F.value ties
+            float p = this.NavMeshGraph.MinEdgeCost / 2000;
+
             var initialNode = new NodeRecord
             {
                 gValue = 0,
-                hValue = this.Heuristic.H(this.StartNode, this.GoalNode),
+                //hValue = this.Heuristic.H(this.StartNode, this.GoalNode),
+                hValue = (1 + p) * this.Heuristic.H(this.StartNode, this.GoalNode),
                 node = this.StartNode
             };
 
@@ -78,6 +83,29 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //this is where you process a child node 
             var childNode = GenerateChildNodeRecord(bestNode, connectionEdge);
             //TODO put the code from the previous LAB here
+
+            NodeRecord nodeInOpen = Open.SearchInOpen(childNode);
+            NodeRecord nodeInClosed = Closed.SearchInClosed(childNode);
+
+            if (nodeInOpen == null && nodeInClosed == null)     //if child node is not in Open or Closed list, add to Open list
+            {
+                Open.AddToOpen(childNode);
+            }
+            else
+            {       //the >= solves the F.value tie, easiest way to solve this
+                if (nodeInOpen != null && nodeInOpen.fValue > childNode.fValue)     // if the same state is on Open list but with higher f-value, replace nodes
+                {
+                    Open.Replace(nodeInOpen, childNode);
+                }
+                else
+                {
+                    if (nodeInClosed != null && nodeInClosed.fValue > childNode.fValue)  // if the same state is on Closed list but with higher f-value, remove from Closed and add to Open list
+                    {
+                        Closed.RemoveFromClosed(nodeInClosed);
+                        Open.AddToOpen(childNode);
+                    }
+                }
+            }
         }
 
         //this method should return true if the Search process finished (i.e either because it found a solution or because there was no solution
@@ -90,8 +118,60 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //you will get compiler errors, because I change the method names in the IOpenSet and IClosedSet interfaces
             //sorry but I had to do it because if not, Unity profiler would consider the Search method in Open and Closed to be the same
             //and you would not be able to see the difference in performance searching the Open Set and in searching the closed set
-            
+
             //so just replace this.Open.Search(...) by this.Open.SearchInOpen(...) and all other methods where you get the compilation errors
+            float runningTime = Time.realtimeSinceStartup;
+            int processedNode = 0;
+
+            while (Open.CountOpen() != 0)
+            {              //if EMPTY(open)?
+                if (Open.CountOpen() > MaxOpenNodes)
+                {
+                    MaxOpenNodes = Open.CountOpen();
+                }
+
+                ++processedNode;
+                ++TotalProcessedNodes;
+
+                NodeRecord bestNode = Open.GetBestAndRemove();     //POP(open)
+
+                if (GoalNode.Equals(bestNode.node))
+                {        //if node is the goal return solution
+                    this.CleanUp();
+                    this.InProgress = false;
+                    TotalProcessingTime += Time.realtimeSinceStartup - runningTime;
+                    solution = CalculateSolution(bestNode, false);    //solution is not partial
+                    return true;
+                }
+                else
+                {
+                    this.Closed.AddToClosed(bestNode);
+                }
+
+                int outConnections = bestNode.node.OutEdgeCount;
+                for (int i = 0; i < outConnections; i++)
+                {
+                    ProcessChildNode(bestNode, bestNode.node.EdgeOut(i));
+                }
+                if (processedNode >= NodesPerSearch)
+                {
+                    TotalProcessingTime += Time.realtimeSinceStartup - runningTime;
+                    if (returnPartialSolution)
+                    {
+                        solution = CalculateSolution(Open.PeekBest(), true);
+                    }
+                    else
+                    {
+                        solution = null;
+                    }
+                    return true;
+                }
+            }
+            this.CleanUp();
+            this.InProgress = false;
+            TotalProcessingTime += Time.realtimeSinceStartup - runningTime;
+            solution = null;
+            return true;
         }
 
         protected NavigationGraphNode Quantize(Vector3 position)

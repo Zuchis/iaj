@@ -41,8 +41,43 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 };
                 this.NodeRecordArray.AddSpecialCaseNode(childNodeRecord);
             }
+            //solving ties
+            float p = this.NavMeshGraph.MinEdgeCost / 2000;
+            
+            h = (1 + p) * this.Heuristic.H(childNode, this.GoalNode);
+            g = bestNode.gValue + connectionEdge.Cost;
+            f = F(g, h);
 
-            //TODO implement the rest of your code here
+            if(childNodeRecord.status == NodeStatus.Unvisited)
+            {
+                NodeRecordUpdate(childNodeRecord, bestNode, g, h);
+                this.NodeRecordArray.AddToOpen(childNodeRecord);
+            }
+            else
+            {
+                if (childNodeRecord.status == NodeStatus.Open && childNodeRecord.fValue > f)
+                {
+                    NodeRecordUpdate(childNodeRecord, bestNode, g, h);
+                    this.NodeRecordArray.Replace(childNodeRecord, childNodeRecord);
+                }
+                else
+                {
+                    if(childNodeRecord.status == NodeStatus.Closed && childNodeRecord.fValue > f)
+                    {
+                        NodeRecordUpdate(childNodeRecord, bestNode, g, h);
+                        this.NodeRecordArray.RemoveFromClosed(childNodeRecord);
+                        this.NodeRecordArray.AddToOpen(childNodeRecord);
+                    }
+                }
+            }
+        }
+
+        private void NodeRecordUpdate(NodeRecord childNodeRecord, NodeRecord parent, float g, float h)
+        {
+            childNodeRecord.parent = parent;
+            childNodeRecord.gValue = g;
+            childNodeRecord.hValue = h;
+            childNodeRecord.fValue = F(childNodeRecord);
         }
             
         private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)
