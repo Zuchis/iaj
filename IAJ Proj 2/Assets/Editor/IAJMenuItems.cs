@@ -63,8 +63,23 @@ public class IAJMenuItems  {
         Gateway endGate;
 
         var pathfindingAlgorithm = new NodeArrayAStarPathFinding(navMesh, new EuclideanHeuristic());
-
+        
         //TODO implement the rest of the algorithm here, i.e. build the GatewayDistanceTable
+
+        //GatewayDistanceTableRow[] gatewayDistanceTable;
+        List<GatewayDistanceTableRow> gatewayDistanceTable = new List<GatewayDistanceTableRow>();
+
+        foreach(var g1 in clusterGraph.gateways)
+        {
+            foreach (var g2 in clusterGraph.gateways)
+            {
+                GatewayDistanceTableEntry entry = new GatewayDistanceTableEntry();
+                entry.startGatewayPosition = g1.center;
+                entry.endGatewayPosition = g2.center;
+                entry.shortestDistance = 
+                gatewayDistanceTable.Add(
+            }
+        }
 
         //create a new asset that will contain the ClusterGraph and save it to disk (DO NOT REMOVE THIS LINE)
         clusterGraph.SaveToAssetDatabase();

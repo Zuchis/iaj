@@ -20,8 +20,14 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
 
         public Cluster Quantize(NavigationGraphNode node)
         {
-            //TODO implement this
-            throw new NotImplementedException();
+            //TODO maybe implement with hastables
+            foreach(var c in clusters){
+                if(node.Position.x <= c.max.x && node.Position.x >= c.min.x && node.Position.z <= c.max.z && node.Position.z >= c.min.z)
+                {
+                    return c;
+                }
+            }
+            return null;
         }
 
         public void SaveToAssetDatabase()
@@ -70,3 +76,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         }
     }
 }
+/*from cluster center to node???
+            Cluster c = new Cluster();
+            c.center.x = Mathf.Floor(node.Position.x / tilesize(clustersize??);
+            TileX = Mathf.Floor(node.Position.x / tileSize);
+            TileZ = Mathf.Floor(node.Position.z / tileSize);*/
