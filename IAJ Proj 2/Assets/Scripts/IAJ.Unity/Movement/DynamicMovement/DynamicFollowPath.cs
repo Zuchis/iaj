@@ -13,15 +13,14 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         private MovementOutput EmptyMovementOutput { get; set; }
 
-
         public DynamicFollowPath(KinematicData character, Path path) 
         {
             this.Target = new KinematicData();
             this.Character = character;
             this.Path = path;
             this.EmptyMovementOutput = new MovementOutput();
-            this.PathOffset = 1.00f;
-            this.CurrentParam = 0f; //????????
+            this.PathOffset = 1.50f;
+            //this.CurrentParam = 0f; //????????
             //don't forget to set all properties
             //arrive properties
                       
@@ -29,18 +28,17 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public override MovementOutput GetMovement()
         {
-            if (Path == null) { Debug.Log("PATH IS NULL"); return EmptyMovementOutput; }
+            if (this.Path == null) return EmptyMovementOutput;
 
-            if (Path.PathEnd(this.CurrentParam)) { Debug.Log("REACHED PATH END"); return EmptyMovementOutput; }
+            if (this.Path.PathEnd(this.CurrentParam)) { /*this.Target.position = this.Path.GetPosition(this.CurrentParam);*/ return base.GetMovement(); }//return EmptyMovementOutput; 
 
             this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
             Debug.Log("CURRENT PARAM = " + CurrentParam);
             this.Target.position = this.Path.GetPosition(this.CurrentParam + this.PathOffset);
-            this.CurrentParam = this.Path.GetParam(Target.position, CurrentParam);
-            //Target.position.y = Character.position.y;
-            //this.PathOffset = PathOffset++;
-            return base.GetMovement();
+            //this.Target.position.y = 0;
+            //this.CurrentParam = this.Path.GetParam(Target.position, CurrentParam);
             
+            return base.GetMovement(); 
         }
     }
 }

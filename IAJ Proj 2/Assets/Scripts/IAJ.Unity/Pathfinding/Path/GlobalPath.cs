@@ -37,28 +37,45 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
         public override float GetParam(Vector3 position, float previousParam)
         {
             int index = Mathf.FloorToInt(previousParam);
-            
+            Debug.Log("INDEX = " + index);
             float param = LocalPaths[index].GetParam(position, 0);
             while(param == 1)
             {
+                if(index + 1 >= LocalPaths.Count)    //TODO MUDEI ISTO 
+                {
+                    return index + param;
+                }
+               
                 param = LocalPaths[index++].GetParam(position, 0);
             }
+            /*while (index > LocalPaths.Count)
+            {
+                index--;
+            }*/
+            param = LocalPaths[index].GetParam(position, 0);
             //if (param == 1 && index + 1 < LocalPaths.Count) index++;  //recursividade, quando nao der 1 tamos no segmento certo
-           
-            
-            return LocalPaths[index].GetParam(position, 0);
+
+            return index + param;
         }
 
         public override Vector3 GetPosition(float param)
         {
             int roundParam = Mathf.FloorToInt(param);   
             float diff = param - roundParam;
+            while(roundParam >= LocalPaths.Count)
+            {
+                roundParam--;
+            }
+           /* if(roundParam + 1 >= LocalPaths.Count)   //TODO MUDEI ISTO 
+            {
+                roundParam--;
+            }*/
             return LocalPaths[roundParam].GetPosition(diff);
         }
 
         public override bool PathEnd(float param)
         {
-            return param >= (LocalPaths.Count - 0.05);
+            return param >= LocalPaths.Count;
         }
     }
 }

@@ -152,9 +152,8 @@ public class PathfindingManager : MonoBehaviour {
 
             Gizmos.color = Color.yellow;
             //draw the target for the follow path movement
-            if (this.character != null)
+            if (this.character.Movement != null)
             {
-               if(this.character.Movement == null) Debug.Log("Movement is null");
                 Gizmos.DrawSphere(this.character.Movement.Target.position, 1.0f);
             }
         }
