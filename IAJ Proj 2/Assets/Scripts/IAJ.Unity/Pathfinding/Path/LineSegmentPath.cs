@@ -15,20 +15,17 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override Vector3 GetPosition(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            return StartPosition + LineVector * param;
         }
 
         public override bool PathEnd(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            return param >= 0.99f;
         }
 
         public override float GetParam(Vector3 position, float lastParam)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            return MathHelper.closestParamInLineSegmentToPoint(StartPosition, EndPosition, position);
         }
     }
 }

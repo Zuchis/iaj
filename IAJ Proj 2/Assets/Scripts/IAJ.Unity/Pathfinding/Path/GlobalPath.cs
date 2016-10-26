@@ -26,7 +26,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
             Vector3 previousPosition = initialPosition;
             for (int i = 0; i < this.PathPositions.Count; i++)
             {
-
                 if (!previousPosition.Equals(this.PathPositions[i]))
                 {
                     this.LocalPaths.Add(new LineSegmentPath(previousPosition, this.PathPositions[i]));
@@ -37,20 +36,29 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override float GetParam(Vector3 position, float previousParam)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            int index = Mathf.FloorToInt(previousParam);
+            
+            float param = LocalPaths[index].GetParam(position, 0);
+            while(param == 1)
+            {
+                param = LocalPaths[index++].GetParam(position, 0);
+            }
+            //if (param == 1 && index + 1 < LocalPaths.Count) index++;  //recursividade, quando nao der 1 tamos no segmento certo
+           
+            
+            return LocalPaths[index].GetParam(position, 0);
         }
 
         public override Vector3 GetPosition(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            int roundParam = Mathf.FloorToInt(param);   
+            float diff = param - roundParam;
+            return LocalPaths[roundParam].GetPosition(diff);
         }
 
         public override bool PathEnd(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            return param >= (LocalPaths.Count - 0.05);
         }
     }
 }

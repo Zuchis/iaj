@@ -1,4 +1,5 @@
-﻿using RAIN.Navigation.Graph;
+﻿using Assets.Scripts.IAJ.Unity.Utils;
+using RAIN.Navigation.Graph;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -23,7 +24,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         {
             //TODO maybe implement with hastables
             foreach(var c in clusters){
-                if(node.Position.x <= c.max.x && node.Position.x >= c.min.x && node.Position.z <= c.max.z && node.Position.z >= c.min.z)
+                if (MathHelper.PointInsideBoundingBox(node.Position, c.min, c.max))
                 {
                     return c;
                 }

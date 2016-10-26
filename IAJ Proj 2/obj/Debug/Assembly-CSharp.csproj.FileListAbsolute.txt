@@ -29,3 +29,26 @@ D:\Aulas IST\IA para jogos\Práticas\Pathfinding\IAJ Pathfinding 4\obj\Debug\Ass
 C:\Users\luis\Desktop\IAJ\Projecto\Proj2\IAJ Proj 2\IAJ Proj 2\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\luis\Desktop\IAJ\Projecto\Proj2\IAJ Proj 2\IAJ Proj 2\obj\Debug\Assembly-CSharp.dll
 C:\Users\luis\Desktop\IAJ\Projecto\Proj2\IAJ Proj 2\IAJ Proj 2\obj\Debug\Assembly-CSharp.pdb
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Assembly-CSharp.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Assembly-CSharp.pdb
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\RAIN.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\RAINMetaform.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEditor.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.Networking.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.UI.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Mono.Cecil.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Unity.SerializationLogic.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Unity.DataContract.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Unity.UNetWeaver.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Unity.CecilTools.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Mono.Cecil.Pdb.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\Mono.Cecil.Mdb.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.xml
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEditor.xml
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.UI.xml
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\Temp\bin\Debug\UnityEngine.Networking.xml
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\obj\Debug\Assembly-CSharp.dll
+C:\Users\luis\Desktop\IAJ\github\iaj\IAJ Proj 2\obj\Debug\Assembly-CSharp.pdb
