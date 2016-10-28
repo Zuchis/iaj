@@ -26,7 +26,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
             Vector3 previousPosition = initialPosition;
             for (int i = 0; i < this.PathPositions.Count; i++)
             {
-                if (!previousPosition.Equals(this.PathPositions[i]))
+                //if (!previousPosition.Equals(this.PathPositions[i]))
+                if(Vector3.Distance(this.PathPositions[i], previousPosition) > 0.3f)
                 {
                     this.LocalPaths.Add(new LineSegmentPath(previousPosition, this.PathPositions[i]));
                     previousPosition = this.PathPositions[i];
@@ -34,27 +35,31 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
             }
         }
 
+
+
         public override float GetParam(Vector3 position, float previousParam)
         {
             int index = Mathf.FloorToInt(previousParam);
             Debug.Log("INDEX = " + index);
+            if (index == 0) index = 1;
             float param = LocalPaths[index].GetParam(position, 0);
-            while(param == 1)
+            while(param >= 0.90f)
             {
-                if(index + 1 >= LocalPaths.Count)    //TODO MUDEI ISTO 
+                if(index + 1 >= LocalPaths.Count)    
                 {
                     return index + param;
                 }
                
                 param = LocalPaths[index++].GetParam(position, 0);
             }
+
             /*while (index > LocalPaths.Count)
             {
                 index--;
             }*/
-            param = LocalPaths[index].GetParam(position, 0);
+            //param = LocalPaths[index].GetParam(position, 0);
             //if (param == 1 && index + 1 < LocalPaths.Count) index++;  //recursividade, quando nao der 1 tamos no segmento certo
-
+            Debug.Log("RESULT = " + (index + param));
             return index + param;
         }
 
@@ -75,7 +80,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override bool PathEnd(float param)
         {
-            return param >= LocalPaths.Count;
+            return LocalPaths.Count - param <= 0.5;
         }
     }
 }

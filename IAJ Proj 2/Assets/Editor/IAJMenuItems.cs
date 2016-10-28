@@ -64,9 +64,48 @@ public class IAJMenuItems  {
 
         var pathfindingAlgorithm = new NodeArrayAStarPathFinding(navMesh, new EuclideanHeuristic());
 
+        Gateway gateway1 = null;
+        Gateway gateway2 = null;
+
+        for (int i = 0; i < gateways.Length; i++)
+        {
+            for (int j = 0; j < gateways.Length; j++)
+            {
+                if (i == j)
+                {
+                    clusterGraph.gatewayDistanceTable[i].entries[j].shortestDistance = 0;
+                }
+                else
+                {
+                    foreach (Gateway g in clusterGraph.gateways)
+                    {
+                        if (g.id == i)
+                        {
+                            gateway1 = g;
+                        }
+                        else if (g.id == j)
+                        {
+                            gateway2 = g;
+                        }
+                    }
+                    pathfindingAlgorithm.InitializePathfindingSearch(gateway1.center, gateway2.center);
+                    pathfindingAlgorithm.Search(out solution);
+                    clusterGraph.gatewayDistanceTable[i].entries[j].startGatewayPosition = gateway1.center;
+                    clusterGraph.gatewayDistanceTable[i].entries[j].endGatewayPosition = gateway2.center;
+                    clusterGraph.gatewayDistanceTable[i].entries[j].shortestDistance = solution.Length;
+                }
+            }
+        }
+
+        
+
+
+
+       /*
         foreach (var g1 in clusterGraph.gateways)
         {
-            GatewayDistanceTableRow row = new GatewayDistanceTableRow();        
+            GatewayDistanceTableRow row = new GatewayDistanceTableRow(); 
+             
             foreach (var g2 in clusterGraph.gateways)
             {
                 GatewayDistanceTableEntry entry = new GatewayDistanceTableEntry();
@@ -79,10 +118,13 @@ public class IAJMenuItems  {
             }
             clusterGraph.gatewayDistanceTable.Add(row);
         }
+        */
 
         //create a new asset that will contain the ClusterGraph and save it to disk (DO NOT REMOVE THIS LINE)
         clusterGraph.SaveToAssetDatabase();
     }
+
+  
 
 
     private static List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)

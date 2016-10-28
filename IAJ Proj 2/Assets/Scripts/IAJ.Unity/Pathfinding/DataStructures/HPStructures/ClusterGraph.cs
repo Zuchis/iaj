@@ -11,8 +11,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
     {
         public List<Cluster> clusters;
         public List<Gateway> gateways;
-        //public GatewayDistanceTableRow[] gatewayDistanceTable;
-        public List<GatewayDistanceTableRow> gatewayDistanceTable = new List<GatewayDistanceTableRow>();
+        public GatewayDistanceTableRow[] gatewayDistanceTable;
+        //public List<GatewayDistanceTableRow> gatewayDistanceTable = new List<GatewayDistanceTableRow>();
 
         public ClusterGraph()
         {
