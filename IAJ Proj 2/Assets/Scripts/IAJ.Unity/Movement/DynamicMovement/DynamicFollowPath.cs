@@ -28,15 +28,19 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public override MovementOutput GetMovement()
         {
-            if (this.Path == null) return EmptyMovementOutput;
+            if (object.ReferenceEquals(null, this.Path)) return EmptyMovementOutput;
 
-            if (this.Path.PathEnd(this.CurrentParam)) { /*this.Target.position = this.Path.GetPosition(this.CurrentParam);*/ return base.GetMovement(); }//return EmptyMovementOutput; 
+            if (this.Path.PathEnd(this.CurrentParam)) { 
+                /* hack so our character can stop doing that annoying turn before stopping at the end of the path */
+                this.Character.velocity = this.Path.GetPosition(this.CurrentParam) - this.Path.GetPosition(this.CurrentParam);
+                return base.GetMovement();
+            }
 
             this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
-            Debug.Log("CURRENT PARAM = " + CurrentParam);
+            //Debug.Log("CURRENT PARAM = " + CurrentParam);
             this.Target.position = this.Path.GetPosition(this.CurrentParam + this.PathOffset);
             //this.Target.position.y = 0;
-            //this.CurrentParam = this.Path.GetParam(Target.position, CurrentParam);
+            
             
             return base.GetMovement(); 
         }

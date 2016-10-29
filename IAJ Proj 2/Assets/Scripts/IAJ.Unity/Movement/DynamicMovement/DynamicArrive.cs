@@ -17,8 +17,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         {
             this.MaxAcceleration = 80.0f;
             this.TimeToTarget = 1.0f;
-            this.stopRadius = 2.0f;
-            this.slowRadius = 4.5f;
+            this.stopRadius = 1.0f;
+            this.slowRadius = 2.5f;
             this.maxSpeed = 40.0f;
             this.MovingTarget = new KinematicData();
         }

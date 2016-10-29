@@ -40,7 +40,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
         public override float GetParam(Vector3 position, float previousParam)
         {
             int index = Mathf.FloorToInt(previousParam);
-            Debug.Log("INDEX = " + index);
+            //Debug.Log("INDEX = " + index);
             if (index == 0) index = 1;
             float param = LocalPaths[index].GetParam(position, 0);
             while(param >= 0.90f)
@@ -52,14 +52,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
                
                 param = LocalPaths[index++].GetParam(position, 0);
             }
-
-            /*while (index > LocalPaths.Count)
-            {
-                index--;
-            }*/
-            //param = LocalPaths[index].GetParam(position, 0);
-            //if (param == 1 && index + 1 < LocalPaths.Count) index++;  //recursividade, quando nao der 1 tamos no segmento certo
-            Debug.Log("RESULT = " + (index + param));
+            //Debug.Log("RESULT = " + (index + param));
             return index + param;
         }
 
@@ -71,16 +64,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
             {
                 roundParam--;
             }
-           /* if(roundParam + 1 >= LocalPaths.Count)   //TODO MUDEI ISTO 
-            {
-                roundParam--;
-            }*/
             return LocalPaths[roundParam].GetPosition(diff);
         }
 
         public override bool PathEnd(float param)
         {
-            return LocalPaths.Count - param <= 0.5;
+            return LocalPaths.Count - param <= 0.5f;
         }
     }
 }

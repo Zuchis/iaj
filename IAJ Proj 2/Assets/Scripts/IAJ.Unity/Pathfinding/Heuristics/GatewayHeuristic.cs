@@ -21,11 +21,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
             float cost;
             Cluster node_cluster = this.ClusterGraph.Quantize(node);
             Cluster goalNode_cluster = this.ClusterGraph.Quantize(goalNode);
-            if (node_cluster == null) Debug.Log("NODE NULL");
-            if (goalNode_cluster == null) Debug.Log("GOALNODE NULL");
+            if (object.ReferenceEquals(null, node_cluster) || object.ReferenceEquals(null, goalNode_cluster) || object.ReferenceEquals(node_cluster, goalNode_cluster)) { 
+                //Debug.Log("NODE NULL");
+            //if (goalNode_cluster == null) Debug.Log("GOALNODE NULL");
 
-            if (node_cluster == goalNode_cluster)
-            {
+            //if (node_cluster == goalNode_cluster)
+            //{
                 return EuclideanDistance(node.LocalPosition, goalNode.LocalPosition);
             }
             else
