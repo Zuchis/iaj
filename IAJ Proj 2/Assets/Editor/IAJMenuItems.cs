@@ -77,10 +77,11 @@ public class IAJMenuItems  {
                 {
                     clusterGraph.gatewayDistanceTable[i].entries[j].shortestDistance = 0;
                 }
-                else if(j < i) //we already computed A->B, no need to compute B->A, just copy the value
+                else if (j < i) //we already computed A->B, no need to compute B->A, just copy the value
                 {
-                    clusterGraph.gatewayDistanceTable[j].entries[i] = clusterGraph.gatewayDistanceTable[i].entries[j];
-                    continue;
+                    clusterGraph.gatewayDistanceTable[i].entries[j].startGatewayPosition = clusterGraph.gatewayDistanceTable[j].entries[i].startGatewayPosition;
+                    clusterGraph.gatewayDistanceTable[i].entries[j].endGatewayPosition = clusterGraph.gatewayDistanceTable[j].entries[i].endGatewayPosition;
+                    clusterGraph.gatewayDistanceTable[i].entries[j].shortestDistance = clusterGraph.gatewayDistanceTable[j].entries[i].shortestDistance;
                 }
                 else
                 {
