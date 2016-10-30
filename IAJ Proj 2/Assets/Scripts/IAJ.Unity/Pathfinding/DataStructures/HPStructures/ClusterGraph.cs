@@ -12,7 +12,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         public List<Cluster> clusters;
         public List<Gateway> gateways;
         public GatewayDistanceTableRow[] gatewayDistanceTable;
-        //public List<GatewayDistanceTableRow> gatewayDistanceTable = new List<GatewayDistanceTableRow>();
 
         public ClusterGraph()
         {
@@ -22,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
 
         public Cluster Quantize(NavigationGraphNode node)
         {
-            //TODO maybe implement with hastables
+            //TODO optimize this method
             foreach(var c in clusters){
                 if (MathHelper.PointInsideBoundingBox(node.Position, c.min, c.max))
                 {
@@ -78,8 +77,3 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         }
     }
 }
-/*from cluster center to node???
-            Cluster c = new Cluster();
-            c.center.x = Mathf.Floor(node.Position.x / tilesize(clustersize??);
-            TileX = Mathf.Floor(node.Position.x / tileSize);
-            TileZ = Mathf.Floor(node.Position.z / tileSize);*/

@@ -15,23 +15,17 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 
         public float H(NavigationGraphNode node, NavigationGraphNode goalNode)
         {
-            //for now just returns the euclidean distance
-            //return EuclideanDistance(node.LocalPosition, goalNode.LocalPosition);
             float minCost = 9999999;
             float cost;
             Cluster node_cluster = this.ClusterGraph.Quantize(node);
             Cluster goalNode_cluster = this.ClusterGraph.Quantize(goalNode);
-            if (object.ReferenceEquals(null, node_cluster) || object.ReferenceEquals(null, goalNode_cluster) || object.ReferenceEquals(node_cluster, goalNode_cluster)) { 
-                //Debug.Log("NODE NULL");
-            //if (goalNode_cluster == null) Debug.Log("GOALNODE NULL");
 
-            //if (node_cluster == goalNode_cluster)
-            //{
+            //ignore null's returned from Quantize method and return euclidean distance
+            if (object.ReferenceEquals(null, node_cluster) || object.ReferenceEquals(null, goalNode_cluster) || object.ReferenceEquals(node_cluster, goalNode_cluster)) { 
                 return EuclideanDistance(node.LocalPosition, goalNode.LocalPosition);
             }
             else
             {
-                
                 foreach(Gateway g1 in node_cluster.gateways)
                 {
                     foreach (Gateway g2 in goalNode_cluster.gateways)

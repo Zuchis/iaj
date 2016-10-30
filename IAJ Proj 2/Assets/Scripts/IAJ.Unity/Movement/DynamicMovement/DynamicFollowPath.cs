@@ -20,9 +20,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.Path = path;
             this.EmptyMovementOutput = new MovementOutput();
             this.PathOffset = 1.50f;
-            //this.CurrentParam = 0f; //????????
             //don't forget to set all properties
             //arrive properties
+            //they are set in the DynamicArrive class
                       
         }
 
@@ -31,17 +31,12 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             if (object.ReferenceEquals(null, this.Path)) return EmptyMovementOutput;
 
             if (this.Path.PathEnd(this.CurrentParam)) { 
-                /* hack so our character can stop doing that annoying turn before stopping at the end of the path */
+                /* Hack : next line is a hack so our character can stop doing that annoying turn before stopping at the end of the path */
                 this.Character.velocity = this.Path.GetPosition(this.CurrentParam) - this.Path.GetPosition(this.CurrentParam);
                 return base.GetMovement();
             }
-
             this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
-            //Debug.Log("CURRENT PARAM = " + CurrentParam);
-            this.Target.position = this.Path.GetPosition(this.CurrentParam + this.PathOffset);
-            //this.Target.position.y = 0;
-            
-            
+            this.Target.position = this.Path.GetPosition(this.CurrentParam + this.PathOffset);      
             return base.GetMovement(); 
         }
     }

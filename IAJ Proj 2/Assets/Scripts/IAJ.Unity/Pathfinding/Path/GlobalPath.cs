@@ -40,7 +40,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
         public override float GetParam(Vector3 position, float previousParam)
         {
             int index = Mathf.FloorToInt(previousParam);
-            //Debug.Log("INDEX = " + index);
             if (index == 0) index = 1;
             float param = LocalPaths[index].GetParam(position, 0);
             while(param >= 0.90f)
@@ -52,7 +51,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
                
                 param = LocalPaths[index++].GetParam(position, 0);
             }
-            //Debug.Log("RESULT = " + (index + param));
             return index + param;
         }
 

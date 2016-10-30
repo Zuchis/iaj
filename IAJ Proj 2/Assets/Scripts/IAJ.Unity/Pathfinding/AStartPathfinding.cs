@@ -78,7 +78,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             //this is where you process a child node 
             var childNode = GenerateChildNodeRecord(bestNode, connectionEdge);
-            //TODO put the code from the previous LAB here
 
             NodeRecord nodeInOpen = Open.SearchInOpen(childNode);
             NodeRecord nodeInClosed = Closed.SearchInClosed(childNode);
@@ -88,7 +87,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 Open.AddToOpen(childNode);
             }
             else
-            {       //the >= solves the F.value tie, easiest way to solve this
+            {       
                 if (nodeInOpen != null && nodeInOpen.fValue > childNode.fValue)     // if the same state is on Open list but with higher f-value, replace nodes
                 {
                     Open.Replace(nodeInOpen, childNode);

@@ -58,9 +58,6 @@ public class IAJMenuItems  {
         // Second stage of the algorithm, calculation of the Gateway table
 
         GlobalPath solution = null;
-        float cost;
-        Gateway startGate;
-        Gateway endGate;
 
         var pathfindingAlgorithm = new NodeArrayAStarPathFinding(navMesh, new EuclideanHeuristic());
 
@@ -96,30 +93,6 @@ public class IAJMenuItems  {
                 }
             }
         }
-
-        
-
-
-
-       /*
-        foreach (var g1 in clusterGraph.gateways)
-        {
-            GatewayDistanceTableRow row = new GatewayDistanceTableRow(); 
-             
-            foreach (var g2 in clusterGraph.gateways)
-            {
-                GatewayDistanceTableEntry entry = new GatewayDistanceTableEntry();
-                entry.startGatewayPosition = g1.center;
-                entry.endGatewayPosition = g2.center;
-                pathfindingAlgorithm.InitializePathfindingSearch(g1.center, g2.center);
-                pathfindingAlgorithm.Search(out solution);
-                entry.shortestDistance = solution.Length;
-                row.entries.Add(entry);
-            }
-            clusterGraph.gatewayDistanceTable.Add(row);
-        }
-        */
-
         //create a new asset that will contain the ClusterGraph and save it to disk (DO NOT REMOVE THIS LINE)
         clusterGraph.SaveToAssetDatabase();
     }
