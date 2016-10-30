@@ -60,17 +60,27 @@ public class IAJMenuItems  {
         GlobalPath solution = null;
 
         var pathfindingAlgorithm = new NodeArrayAStarPathFinding(navMesh, new EuclideanHeuristic());
-
+        
         Gateway gateway1 = null;
         Gateway gateway2 = null;
 
+        clusterGraph.gatewayDistanceTable = new GatewayDistanceTableRow[clusterGraph.gateways.Count];   //initialize arrays
+
         for (int i = 0; i < gateways.Length; i++)
         {
+            clusterGraph.gatewayDistanceTable[i] = new GatewayDistanceTableRow();   //initialize arrays
+            clusterGraph.gatewayDistanceTable[i].entries = new GatewayDistanceTableEntry[clusterGraph.gateways.Count];  //initialize arrays
             for (int j = 0; j < gateways.Length; j++)
             {
+                clusterGraph.gatewayDistanceTable[i].entries[j] = new GatewayDistanceTableEntry();  //initialize arrays
                 if (i == j)
                 {
                     clusterGraph.gatewayDistanceTable[i].entries[j].shortestDistance = 0;
+                }
+                else if(j < i) //we already computed A->B, no need to compute B->A, just copy the value
+                {
+                    clusterGraph.gatewayDistanceTable[j].entries[i] = clusterGraph.gatewayDistanceTable[i].entries[j];
+                    continue;
                 }
                 else
                 {

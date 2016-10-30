@@ -19,7 +19,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
             this.gateways = new List<Gateway>();
         }
 
-        public Cluster Quantize(NavigationGraphNode node)
+        /*public Cluster Quantize(NavigationGraphNode node)
         {
             //TODO optimize this method
             foreach(var c in clusters){
@@ -29,7 +29,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
                 }
             }
             return null;
-        }
+        }*/
 
         public void SaveToAssetDatabase()
         {

@@ -7,6 +7,7 @@ using RAIN.Navigation;
 using RAIN.Navigation.NavMesh;
 using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
+using System.Collections.Generic;
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -36,7 +37,7 @@ public class PathfindingManager : MonoBehaviour {
         var clusterGraph =  Resources.Load<ClusterGraph>("ClusterGraph");
         this.draw = false;
         this.navMesh = NavigationManager.Instance.NavMeshGraphs[0];
-        this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph));
+        this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph, GetNodesHack(navMesh)));
         this.AStarPathFinding.NodesPerSearch = 100;
 	}
 	
@@ -55,8 +56,8 @@ public class PathfindingManager : MonoBehaviour {
 				//this is just a small adjustment to better see the debug sphere
 				this.endDebugSphere.transform.position = position + Vector3.up;
 				this.endDebugSphere.SetActive(true);
-				//this.currentClickNumber = 1;
-				this.endPosition = position;
+                //this.currentClickNumber = 1;
+                this.endPosition = position;
 				this.draw = true;
                 //initialize the search algorithm
                 this.AStarPathFinding.InitializePathfindingSearch(this.character.KinematicData.position,this.endPosition);
@@ -98,7 +99,8 @@ public class PathfindingManager : MonoBehaviour {
             var text = "Nodes Visited: " + this.AStarPathFinding.TotalProcessedNodes
                        + "\nMaximum Open Size: " + this.AStarPathFinding.MaxOpenNodes
                        + "\nProcessing time (ms): " + time
-                       + "\nTime per Node (ms):" + timePerNode;
+                       + "\nTime per Node (ms):" + timePerNode
+                       + "\nFill: " + (this.AStarPathFinding.TotalProcessedNodes - this.currentSolution.Length);
             GUI.contentColor = Color.black;
             GUI.Label(new Rect(10,10,200,100),text);
         }
@@ -176,4 +178,16 @@ public class PathfindingManager : MonoBehaviour {
 		//if not the point is not valid
 		return false;
 	}
+
+    private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)
+    {
+        //this hack is needed because in order to implement NodeArrayA* you need to have full acess to all the nodes in the navigation graph in the beginning of the search
+        //unfortunately in RAINNavigationGraph class the field which contains the full List of Nodes is private
+        //I cannot change the field to public, however there is a trick in C#. If you know the name of the field, you can access it using reflection (even if it is private)
+        //using reflection is not very efficient, but it is ok because this is only called once in the creation of the class
+        //by the way, NavMeshPathGraph is a derived class from RAINNavigationGraph class and the _pathNodes field is defined in the base class,
+        //that's why we're using the type of the base class in the reflection call
+        return (List<NavigationGraphNode>)Assets.Scripts.IAJ.Unity.Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
+    }
+
 }
