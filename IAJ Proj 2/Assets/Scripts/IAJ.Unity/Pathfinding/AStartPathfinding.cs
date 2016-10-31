@@ -107,18 +107,22 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             float runningTime = Time.realtimeSinceStartup;
             int processedNode = 0;
+            int openSize = 0;
+            int outConnections;
+            NodeRecord bestNode;
 
-            while (Open.CountOpen() != 0)
+            while ((openSize = Open.CountOpen()) != 0)
             {              //if EMPTY(open)?
-                if (Open.CountOpen() > MaxOpenNodes)
+                //openSize = Open.CountOpen();
+                if (openSize > MaxOpenNodes)
                 {
-                    MaxOpenNodes = Open.CountOpen();
+                    MaxOpenNodes = openSize;
                 }
 
                 ++processedNode;
                 ++TotalProcessedNodes;
 
-                NodeRecord bestNode = Open.GetBestAndRemove();     //POP(open)
+                bestNode = Open.GetBestAndRemove();     //POP(open)
 
                 if (GoalNode.Equals(bestNode.node))
                 {        //if node is the goal return solution
@@ -133,8 +137,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     this.Closed.AddToClosed(bestNode);
                 }
 
-                int outConnections = bestNode.node.OutEdgeCount;
-                for (int i = 0; i < outConnections; i++)
+                outConnections = bestNode.node.OutEdgeCount;
+                for (int i = 0; i < outConnections; i++) // for every adjacent node to the best
                 {
                     ProcessChildNode(bestNode, bestNode.node.EdgeOut(i));
                 }

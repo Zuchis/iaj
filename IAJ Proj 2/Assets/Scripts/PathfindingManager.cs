@@ -86,11 +86,11 @@ public class PathfindingManager : MonoBehaviour {
     {
         if (this.currentSolution != null)
         {
-            var time = this.AStarPathFinding.TotalProcessingTime*1000;
+            var time = this.AStarPathFinding.TotalProcessingTime * 1000;
             float timePerNode;
             if (this.AStarPathFinding.TotalProcessedNodes > 0)
             {
-                timePerNode = time/this.AStarPathFinding.TotalProcessedNodes;
+                timePerNode = time / this.AStarPathFinding.TotalProcessedNodes;
             }
             else
             {
@@ -102,7 +102,7 @@ public class PathfindingManager : MonoBehaviour {
                        + "\nTime per Node (ms):" + timePerNode
                        + "\nFill: " + (this.AStarPathFinding.TotalProcessedNodes - this.currentSolution.Length);
             GUI.contentColor = Color.black;
-            GUI.Label(new Rect(10,10,200,100),text);
+            GUI.Label(new Rect(10, 10, 200, 100), text);
         }
     }
 
