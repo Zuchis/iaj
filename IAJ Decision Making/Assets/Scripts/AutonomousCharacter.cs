@@ -234,7 +234,7 @@ namespace Assets.Scripts
                     this.currentSmoothedSolution.CalculateLocalPathsFromPathPositions(this.Character.KinematicData.position);
 
                     //TODO: use your own configuration for the DynamicFollowPath
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
                     this.Character.Movement = new DynamicFollowPath(this.Character.KinematicData, this.currentSmoothedSolution)
                     {
                         MaxAcceleration = 40.0f,

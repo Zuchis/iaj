@@ -68,7 +68,7 @@ namespace Assets.Scripts.DecisionMakingActions
             base.ApplyActionEffects(worldModel);
 
             var xpValue = worldModel.GetGoalValue(AutonomousCharacter.GAIN_XP_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL,xpValue-this.hpChange); 
+            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL,xpValue-this.xpChange); 
 
             var surviveValue = worldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
             worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL,surviveValue-this.hpChange);
