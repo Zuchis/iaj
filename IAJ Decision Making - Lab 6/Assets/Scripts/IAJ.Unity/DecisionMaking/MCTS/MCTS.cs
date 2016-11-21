@@ -10,7 +10,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public const float C = 1.4f;
         public bool InProgress { get; private set; }
         public int MaxIterations { get; set; }
-        public int MaxIterationsProcessedPerFrame { get; set; }
+        public int MaxIterationsProcessedPerFrame { get; set; } // different for maximum number of iterations, this just separates de algorithms per frames
         public int MaxPlayoutDepthReached { get; private set; }
         public int MaxSelectionDepthReached { get; private set; }
         public float TotalProcessingTime { get; private set; }
@@ -57,17 +57,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.BestActionSequence = new List<GOB.Action>();
         }
 
-        public GOB.Action Run()
-        {
-            MCTSNode selectedNode;
-            Reward reward;
-
-            var startTime = Time.realtimeSinceStartup;
-            this.CurrentIterationsInFrame = 0;
-
-            
-        }
-
         private MCTSNode Selection(MCTSNode initialNode)
         {
             GOB.Action nextAction;
@@ -76,6 +65,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                       
             while (!currentNode.State.IsTerminal())
             {
+                // var action = n.state.getNextAction();
+                // if (action != null) // there is still room for expation
+                //     return this.expand(n,action) 
+                // else 
+                // n = selectBestUCTChild(n);
                 GOB.Action[] validMoves = currentNode.State.GetExecutableActions();
 
                 if(validMoves.Length > currentNode.ChildNodes.Count)  // currentNode not fully expanded
@@ -87,36 +81,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     currentNode = ;    // currentNode = currentNode.bestchild;
                 }
             }
+            // return n;
 
             //TODO: implement
             throw new NotImplementedException();
-        }
-
-
-
-
-        private Reward Playout(WorldModel initialPlayoutState)
-        {
-            while (!initialPlayoutState.IsTerminal())
-            {
-                GOB.Action a = initialPlayoutState.GetNextAction();
-                a.ApplyActionEffects(initialPlayoutState);
-            }
-            Reward r = new Reward();
-            r.Value = initialPlayoutState.GetScore();   //??????????
-            return new Reward();
-
-            //Random rand = new Random((int)DateTime.Now.Ticks);      
-        }
-
-        private void Backpropagate(MCTSNode node, Reward reward)
-        {
-            while (node != null)
-            {
-                node.N += 1;
-                node.Q += 1; // instead of 1 : reward(node, Player(Parent(node)))
-                node = node.Parent;
-           } 
         }
 
         private MCTSNode Expand(MCTSNode parent, GOB.Action action)
@@ -124,9 +92,80 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
            
         }
 
+        public GOB.Action Run()
+        {
+            // while currentIter < maxIterations && currentIterationInFrame < maxIterationsPerFrame
+            MCTSNode selectedNode;
+            Reward reward;
+
+            var startTime = Time.realtimeSinceStartup;
+            this.CurrentIterationsInFrame = 0;
+        }
+
+        private Reward Playout(WorldModel initialPlayoutState)
+        {
+            while (!initialPlayoutState.IsTerminal())
+            {
+                // s = initialPlayoutState
+                // actions = s.getNextExecutableAction();
+                // randomIndex = this.Random.next(actions.Length)
+                GOB.Action a = initialPlayoutState.GetNextAction();
+                a.ApplyActionEffects(initialPlayoutState);
+            }
+            Reward r = new Reward();
+            r.Value = initialPlayoutState.GetScore();   //??????????
+            // return new Reward(PlayerID, s.getScore());
+            return new Reward();
+
+            //Random rand = new Random((int)DateTime.Now.Ticks);      
+        }
+
+        /*
+         biasedPlayout(){
+            actionGetHValue(WorldModel m) ---> ADD THIS METHOD!
+
+            gibbs: e ^h(a) / sum(e ^ -h(a))
+
+            arrayOfOptions = array[actions.legth]
+
+            for(int i = 0; i < actions.length; i++){
+                e = math.pow(e, -action[i].getHValue(s));
+                total += e;
+            }
+
+            returns a value that represents wheter it is good or bad to execute the action in the current world Model m
+            h = 0 -> good value
+            h > 1 -> bad value
+            Example:
+            Fireball.getHValue(worldModel m){
+                if(this.target.tag.Equals("Dragon")
+                    return 100.0f;
+                else if(this.target.tag.Equals("Orc")
+                    return 0.0f;
+                else if(this.target.tag.Equals("Skeleton")
+                    return 0.5f;
+            }
+
+
+         }
+         */
+
+        private void Backpropagate(MCTSNode node, Reward reward)
+        {
+            while (node.Parent != null)
+            {
+                node.N += 1;
+                node.Q += 1; // instead of 1 : reward(node, Player(Parent(node)))
+                node = node.Parent;
+           } 
+        }
+
+
         //gets the best child of a node, using the UCT formula
         private MCTSNode BestUCTChild(MCTSNode node)
         {
+            //foreach (var child in  n.child)
+            // value = child.Q / child.N + c * sqrt(log(n.N / child.N))
             
         }
 
