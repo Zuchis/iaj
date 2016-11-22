@@ -65,26 +65,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                       
             while (!currentNode.State.IsTerminal())
             {
-                // var action = n.state.getNextAction();
-                // if (action != null) // there is still room for expation
-                //     return this.expand(n,action) 
-                // else 
-                // n = selectBestUCTChild(n);
-                GOB.Action[] validMoves = currentNode.State.GetExecutableActions();
-
-                if(validMoves.Length > currentNode.ChildNodes.Count)  // currentNode not fully expanded
+                nextAction = currentNode.State.GetNextAction();
+                if(nextAction != null)
                 {
-                    return Expand(currentNode, validMoves[0]);  // not validMoves[0]
+                    return this.Expand(currentNode, nextAction);
                 }
                 else
                 {
-                    currentNode = ;    // currentNode = currentNode.bestchild;
+                    currentNode = BestUCTChild(currentNode);
                 }
+                // var action = n.state.getNextAction();
+                // if (action != null) // there is still room for expantion
+                //     return this.expand(n,action) 
+                // else 
+                // n = selectBestUCTChild(n);
             }
-            // return n;
-
-            //TODO: implement
-            throw new NotImplementedException();
+            return currentNode;
         }
 
         private MCTSNode Expand(MCTSNode parent, GOB.Action action)
@@ -94,12 +90,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         public GOB.Action Run()
         {
-            // while currentIter < maxIterations && currentIterationInFrame < maxIterationsPerFrame
             MCTSNode selectedNode;
             Reward reward;
 
             var startTime = Time.realtimeSinceStartup;
             this.CurrentIterationsInFrame = 0;
+
+            //create root node v0 for state s0
+
+            // while currentIter < maxIterations && currentIterationInFrame < maxIterationsPerFrame
+            while (CurrentIterations < MaxIterations && CurrentIterationsInFrame < MaxIterationsProcessedPerFrame)
+            {
+                //v1 = this.Selection(v0);
+                //reward = this.Playout(Selection(v1));
+                //this.Backpropagate(v1, reward);
+            }
+            //return BestChild(v0);
         }
 
         private Reward Playout(WorldModel initialPlayoutState)
@@ -155,7 +161,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (node.Parent != null)
             {
                 node.N += 1;
-                node.Q += 1; // instead of 1 : reward(node, Player(Parent(node)))
+                node.Q += reward.Value; // instead of 1 : reward(node, Player(Parent(node)))
                 node = node.Parent;
            } 
         }
@@ -164,7 +170,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //gets the best child of a node, using the UCT formula
         private MCTSNode BestUCTChild(MCTSNode node)
         {
-            //foreach (var child in  n.child)
+            foreach (var child in node.ChildNodes)
+            {
+                //child.
+            }
             // value = child.Q / child.N + c * sqrt(log(n.N / child.N))
             
         }
