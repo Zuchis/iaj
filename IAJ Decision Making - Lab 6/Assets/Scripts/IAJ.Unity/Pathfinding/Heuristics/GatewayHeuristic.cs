@@ -18,6 +18,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
             this.InitializeDictionary(nodes);
         }
 
+    
+
         private void InitializeDictionary(List<NavigationGraphNode> nodes)
         {
             bool flag;
@@ -82,6 +84,39 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
             return minCost;
         }
 
+        public float H(Vector3 node, Vector3 goalNode)
+        {
+            float minCost = 9999999;
+            float cost;
+            Cluster node_cluster = null;
+            Cluster goalNode_cluster = null;
+            foreach (Cluster c in this.ClusterGraph.clusters)
+            {
+                if(MathHelper.PointInsideBoundingBox(node, c.min, c.max))
+                {
+                    node_cluster = c;
+                }
+                else if (MathHelper.PointInsideBoundingBox(goalNode, c.min, c.max))
+                {
+                    goalNode_cluster = c;
+                }
+            }
+            if (node_cluster == goalNode_cluster) return EuclideanDistance(node, goalNode);
+            else
+            {
+                foreach (Gateway g1 in node_cluster.gateways)
+                {
+                    foreach (Gateway g2 in goalNode_cluster.gateways)
+                    {
+                        cost = EuclideanDistance(node, g1.center) + this.ClusterGraph.gatewayDistanceTable[g1.id].entries[g2.id].shortestDistance + EuclideanDistance(g2.center, goalNode);
+                        if (cost < minCost) minCost = cost;
+                    }
+                }
+            }
+            return minCost;
+
+        }
+        
         public float EuclideanDistance(Vector3 startPosition, Vector3 endPosition)
         {
             return (endPosition - startPosition).magnitude;

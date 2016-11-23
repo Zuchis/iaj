@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.GameManager;
 using Assets.Scripts.IAJ.Unity.DecisionMaking.GOB;
+using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
 using UnityEngine;
 using Action = Assets.Scripts.IAJ.Unity.DecisionMaking.GOB.Action;
 
@@ -20,14 +21,14 @@ namespace Assets.Scripts.DecisionMakingActions
         public override float GetDuration()
         {
             //assume a velocity of 20.0f/s to get to the target
-            return (this.Target.transform.position - this.Character.Character.KinematicData.position).magnitude / 20.0f;
+            return (this.Target.transform.position - this.Character.Character.KinematicData.position).magnitude / this.Character.Character.MaxSpeed; //20.0f;
         }
 
         public override float GetDuration(WorldModel worldModel)
         {
             //assume a velocity of 20.0f/s to get to the target
             var position = (Vector3)worldModel.GetProperty(Properties.POSITION);
-            return (this.Target.transform.position - position).magnitude / 20.0f;
+            return (this.Target.transform.position - position).magnitude / this.Character.Character.MaxSpeed; //20.0f;        
         }
 
         public override float GetGoalChange(Goal goal)

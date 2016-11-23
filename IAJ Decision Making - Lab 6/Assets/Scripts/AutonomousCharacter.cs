@@ -150,7 +150,7 @@ namespace Assets.Scripts
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
             this.MCTSDecisionMaking = new MCTS(worldModel);
-            this.MCTSDecisionMaking.MaxIterations = 1000;
+            this.MCTSDecisionMaking.MaxIterations = 4000;
             this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 25;
         }
 
