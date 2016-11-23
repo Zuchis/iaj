@@ -12,6 +12,7 @@ using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
 using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
 using Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS;
 using Assets.Scripts.GameManager;
+using RAIN.Navigation.Graph;
 
 namespace Assets.Scripts
 {
@@ -81,7 +82,7 @@ namespace Assets.Scripts
 
             var clusterGraph = Resources.Load<ClusterGraph>("ClusterGraph");
        
-            this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph)));
+            this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph, GetNodesHack(navMesh))));
 
 
             //initialization of the GOB decision making
@@ -153,8 +154,8 @@ namespace Assets.Scripts
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
             this.MCTSDecisionMaking = new MCTS(worldModel);
-            this.MCTSDecisionMaking.MaxIterations = 5000;
-            this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 25;
+            this.MCTSDecisionMaking.MaxIterations = 10000;
+            this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 50;
         }
 
         void Update()
@@ -240,7 +241,7 @@ namespace Assets.Scripts
                     this.Character.Movement = new DynamicFollowPath(this.Character.KinematicData, this.currentSmoothedSolution)
                     {
                         MaxAcceleration = 200.0f,
-                        MaxSpeed = 40.0f
+                        maxSpeed = 40.0f
                     };
                 }
             }
@@ -321,6 +322,10 @@ namespace Assets.Scripts
                 this.AStarPathFinding.InitializePathfindingSearch(this.Character.KinematicData.position, targetPosition);
                 this.previousTarget = targetPosition;
             }
+        }
+        private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)
+        {
+            return (List<NavigationGraphNode>)Assets.Scripts.IAJ.Unity.Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
         }
     }
 }

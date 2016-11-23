@@ -21,14 +21,18 @@ namespace Assets.Scripts.DecisionMakingActions
         public override float GetDuration()
         {
             //assume a velocity of 20.0f/s to get to the target
-            return (this.Target.transform.position - this.Character.Character.KinematicData.position).magnitude / this.Character.Character.MaxSpeed; //20.0f;
+            //return (this.Target.transform.position - this.Character.Character.KinematicData.position).magnitude / this.Character.Character.MaxSpeed; //20.0f;
+            GatewayHeuristic g = (GatewayHeuristic)this.Character.GameManager.autonomousCharacter.AStarPathFinding.Heuristic;
+            return g.H(this.Character.Character.KinematicData.position, this.Target.transform.position) / this.Character.Character.MaxSpeed;
         }
 
         public override float GetDuration(WorldModel worldModel)
         {
             //assume a velocity of 20.0f/s to get to the target
             var position = (Vector3)worldModel.GetProperty(Properties.POSITION);
-            return (this.Target.transform.position - position).magnitude / this.Character.Character.MaxSpeed; //20.0f;        
+            //return (this.Target.transform.position - position).magnitude / this.Character.Character.MaxSpeed; //20.0f;  
+            GatewayHeuristic g = (GatewayHeuristic)this.Character.GameManager.autonomousCharacter.AStarPathFinding.Heuristic;
+            return g.H(this.Character.Character.KinematicData.position, this.Target.transform.position) / this.Character.Character.MaxSpeed;         
         }
 
         public override float GetGoalChange(Goal goal)

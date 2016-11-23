@@ -238,12 +238,12 @@ namespace Assets.Scripts.GameManager
 
         public bool InChestRange(GameObject chest)
         {
-            return this.CheckRange(chest, 9.0f);
+            return this.CheckRange(chest, 15.0f);
         }
 
         public bool InPotionRange(GameObject potion)
         {
-            return this.CheckRange(potion, 9.0f);
+            return this.CheckRange(potion, 15.0f);
         }
     }
 }

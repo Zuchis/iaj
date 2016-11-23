@@ -10,7 +10,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
         }
-
+        /*
         protected override Reward Playout(WorldModel initialPlayoutState)
         {
             //TODO: implement
@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             //TODO: implement
             throw new NotImplementedException();
-        }
+        }*/
 
        /* actionGetHValue(WorldModel m) ---> ADD THIS METHOD!
 

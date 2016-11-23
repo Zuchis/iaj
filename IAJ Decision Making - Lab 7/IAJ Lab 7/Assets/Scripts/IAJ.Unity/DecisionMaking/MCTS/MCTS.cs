@@ -91,6 +91,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             parent.ChildNodes.Add(child);
             child.Action = action;
             action.ApplyActionEffects(child.State);
+            child.State.CalculateNextPlayer();
             return child;
         }
 
@@ -110,9 +111,17 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 v1 = this.Selection(v0);
                 reward = this.Playout(v1.State);
                 this.Backpropagate(v1, reward);
-                this.CurrentIterations++;
+                //this.CurrentIterations++;
+                this.CurrentIterationsInFrame++;
             }
-            return this.BestChild(this.InitialNode).Action;
+            GOB.Action a = this.BestChild(v0).Action;
+            if (!this.BestActionSequence.Contains(a))
+            {
+
+                BestActionSequence.Add(a);
+                Debug.Log(BestActionSequence.Count);
+            }
+            return a; //this.initialNode or v0???
         }
 
 
@@ -128,6 +137,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 randomIndex = this.RandomGenerator.Next(actions.Length);
                 GOB.Action randomAction = actions[randomIndex];
                 randomAction.ApplyActionEffects(wm);
+                wm.CalculateNextPlayer();
             }
             Reward r = new Reward();
             r.PlayerID = this.InitialNode.PlayerID;
@@ -222,6 +232,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     chosenChild = child;
                 }
             }
+            this.BestFirstChild = chosenChild;
             return chosenChild;
         }
 

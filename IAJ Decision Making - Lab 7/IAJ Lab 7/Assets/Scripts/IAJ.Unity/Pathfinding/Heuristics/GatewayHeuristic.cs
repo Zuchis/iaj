@@ -18,7 +18,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
             this.InitializeDictionary(nodes);
         }
 
-    
+        public GatewayHeuristic(ClusterGraph clusterGraph)
+        {
+            this.ClusterGraph = clusterGraph;
+        }
 
         private void InitializeDictionary(List<NavigationGraphNode> nodes)
         {
@@ -61,7 +64,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 
         public float H(NavigationGraphNode node, NavigationGraphNode goalNode)
         {
-            float minCost = 9999999;
+            float minCost = 9999999.9f;
             float cost;
             Cluster node_cluster = this.nodeClusterDictionary[node];
             Cluster goalNode_cluster = this.nodeClusterDictionary[goalNode];
@@ -101,7 +104,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
                     goalNode_cluster = c;
                 }
             }
-            if (node_cluster == goalNode_cluster) return EuclideanDistance(node, goalNode);
+            if (object.ReferenceEquals(null, node_cluster) || object.ReferenceEquals(null, goalNode_cluster) || object.ReferenceEquals(node_cluster, goalNode_cluster))
+            {
+                return EuclideanDistance(node, goalNode);
+            }
             else
             {
                 foreach (Gateway g1 in node_cluster.gateways)
