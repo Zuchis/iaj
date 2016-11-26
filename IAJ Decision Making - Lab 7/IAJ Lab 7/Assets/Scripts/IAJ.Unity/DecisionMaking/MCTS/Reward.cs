@@ -13,7 +13,8 @@
                 return this.Value;
             }
 
-            //a reward for a node is given by the player of the node's parent (which is the one taking the decision about what is the best child to choose)
+            //a reward for a node is given by the player of the node's parent (which is the one taking 
+            //the decision about what is the best child to choose)
             int player = node.Parent.PlayerID;
 
             if(player == this.PlayerID)

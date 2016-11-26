@@ -46,7 +46,7 @@ namespace Assets.Scripts.DecisionMakingActions
             if (mana < 5)
                 return 0.3;
 
-            return 1.0;
+            return 1000.0;
 
         }
 

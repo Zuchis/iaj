@@ -58,14 +58,23 @@ namespace Assets.Scripts.DecisionMakingActions
             var orc1Alive = (bool)m.GetProperty("Orc");
             var orc2Alive = (bool)m.GetProperty("Orc (1)");
 
-            if (this.Target.name.Equals("Chest (4)") && dragonAlive && hp < 20)
-                return 1.0;
+            if (this.Target.name.Equals("Chest (4)") && dragonAlive && hp <= 20)
+            {
+                //Debug.Log("ENTREI NO 1 -> " + this.Target.name.Equals("Chest (4)"));
+                return 1000.0;
+            }
 
-            if (this.Target.name.Equals("Chest (1)") && orc2Alive && hp < 10)
-                return 1.0;
+            if (this.Target.name.Equals("Chest (1)") && orc2Alive && hp <= 10)
+            {
+                //Debug.Log("ENTREI NO 2");
+                return 1000.0;
+            }
 
-            if (this.Target.name.Equals("Chest (2)") && orc1Alive && hp < 10)
-                return 1.0;
+            if (this.Target.name.Equals("Chest (2)") && orc1Alive && hp <= 10)
+            {
+                //Debug.Log("ENTREI NO 3");
+                return 1000.0;
+            }
 
             return 0.4;
 

@@ -41,6 +41,8 @@ namespace Assets.Scripts.GameManager
         {
             int money = (int)this.GetProperty(Properties.MONEY);
 
+            //Debug.Log(money);
+
             if (money == 25)
             {
                 return 1.0f;

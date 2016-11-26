@@ -152,8 +152,10 @@ namespace Assets.Scripts
             }
 
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
-            this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
-            this.MCTSDecisionMaking = new MCTS(worldModel);
+            //this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
+            //this.MCTSDecisionMaking = new MCTS(worldModel);
+            //this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
+            this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
             this.MCTSDecisionMaking.MaxIterations = 10000;
             this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 50;
         }

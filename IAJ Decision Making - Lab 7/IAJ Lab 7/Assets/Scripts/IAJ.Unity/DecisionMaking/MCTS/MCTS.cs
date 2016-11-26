@@ -35,7 +35,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.CurrentStateWorldModel = currentStateWorldModel;
             this.MaxIterations = 100;
             this.MaxIterationsProcessedPerFrame = 10;
-            this.RandomGenerator = new System.Random();
+            this.RandomGenerator = new System.Random(); //new System.Random(DateTime.Now.TimeOfDay.Milliseconds);
         }
 
 
@@ -63,13 +63,20 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             GOB.Action nextAction;
             MCTSNode currentNode = initialNode;
             MCTSNode previousNode;
-            //MCTSNode bestChild;
-
+            MCTSNode bestChild;
+            GOB.Action[] actions = currentNode.State.GetExecutableActions();
+            List<GOB.Action> list = new List<GOB.Action>();
+            for(int i = 0; i < actions.Length; i++){ list.Add(actions[i]); }
             while (currentNode != null && !currentNode.State.IsTerminal())
             {
-                nextAction = currentNode.State.GetNextAction();
+                int randomIndex = this.RandomGenerator.Next(list.Count);
+                //nextAction = currentNode.State.GetNextAction();
+                nextAction = list[randomIndex];
+                list.Remove(actions[randomIndex]);
+                
                 if (nextAction != null)
                 {
+                    //Debug.Log(nextAction);
                     return this.Expand(currentNode, nextAction);
                 }
                 else
@@ -87,11 +94,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private MCTSNode Expand(MCTSNode parent, GOB.Action action)
         {
             MCTSNode child = new MCTSNode(parent.State.GenerateChildWorldModel());
-            child.Parent = parent;
-            parent.ChildNodes.Add(child);
-            child.Action = action;
             action.ApplyActionEffects(child.State);
             child.State.CalculateNextPlayer();
+            child.Parent = parent;
+            child.Action = action;
+            parent.ChildNodes.Add(child);
             return child;
         }
 
@@ -111,7 +118,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 v1 = this.Selection(v0);
                 reward = this.Playout(v1.State);
                 this.Backpropagate(v1, reward);
-                //this.CurrentIterations++;
+                this.CurrentIterations++;
                 this.CurrentIterationsInFrame++;
             }
             if (!v0.State.IsTerminal()) //hack to display victory screen
@@ -121,7 +128,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 {
 
                     BestActionSequence.Add(a);
-                    Debug.Log(BestActionSequence.Count);
+                    //Debug.Log(BestActionSequence.Count);
                 }
                 return a;
             }

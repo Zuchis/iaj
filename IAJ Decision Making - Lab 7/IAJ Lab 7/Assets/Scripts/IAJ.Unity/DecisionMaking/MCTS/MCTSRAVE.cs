@@ -15,7 +15,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
         }
 
-        /*protected override MCTSNode BestUCTChild(MCTSNode node)
+        protected override MCTSNode BestUCTChild(MCTSNode node)
         {
             float MCTSValue;
             float RAVEValue;
@@ -41,6 +41,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             //TODO: implement
             throw new NotImplementedException();
-        }*/
+        }
     }
 }

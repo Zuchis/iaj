@@ -16,8 +16,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             WorldModel child = initialPlayoutState.GenerateChildWorldModel();
             while (!child.IsTerminal())
-            {
-                GOB.Action[] actions = initialPlayoutState.GetExecutableActions();
+            {   
+                GOB.Action[] actions = child.GetExecutableActions();
                 double[] actionIndexes = new double[actions.Length];
                 double heuristicValue = 0.0;
                 double accumulatedHeuristicValue = 0.0;
@@ -25,26 +25,35 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 int chosenActionIndex = 0;
                 for (int i = 0; i < actions.Length; i++)
                 {
+
                     heuristicValue = actions[i].GetHValue(child);
                     accumulatedHeuristicValue += Math.Pow(Mathf.Epsilon, -heuristicValue);
                     actionIndexes[i] = accumulatedHeuristicValue;
                 }
-
+                
                 randomIndex = this.RandomGenerator.NextDouble() * accumulatedHeuristicValue;
-
+                //Debug.Log("Acumulated: " + accumulatedHeuristicValue);
                 for (int i = 0; i < actions.Length; i++)
                 {
-                    if (randomIndex < actionIndexes[i])
+                    if (randomIndex <= actionIndexes[i])
+                    {
                         chosenActionIndex = i;
+                        break;
+                    }
+                        
                 }
 
                 actions[chosenActionIndex].ApplyActionEffects(child);
                 child.CalculateNextPlayer();
             }
+            
             Reward r = new Reward();
             r.PlayerID = this.InitialNode.PlayerID;
             r.Value = child.GetScore();
-            return r;
+            
+            //Debug.Log("REWARD VALUE: " + r.Value);
+            //Debug.Log("CHOSEN INDEX: " + chosenActionIndex);
+            return r;//.GetRewardForNode(); 
         }
 
         /*
