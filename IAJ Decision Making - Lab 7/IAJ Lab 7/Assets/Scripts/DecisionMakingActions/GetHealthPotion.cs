@@ -38,5 +38,21 @@ namespace Assets.Scripts.DecisionMakingActions
             //disables the target object so that it can't be reused again
             worldModel.SetProperty(this.Target.name, false);
         }
+
+        public override double GetHValue(WorldModel m)
+        {
+            var hp = (int)m.GetProperty(Properties.HP);
+            var level = (int)m.GetProperty(Properties.LEVEL);
+
+            if (hp <= 5 )
+                return 0.0;
+            if (hp <= 10 && level > 1)
+                return 0.3;
+            if (hp <= 20 && level > 2)
+                return 0.4;
+
+            return 1.0;
+        }
+
     }
 }

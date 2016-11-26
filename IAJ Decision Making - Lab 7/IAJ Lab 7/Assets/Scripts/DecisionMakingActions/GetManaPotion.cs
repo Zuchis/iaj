@@ -39,6 +39,17 @@ namespace Assets.Scripts.DecisionMakingActions
             worldModel.SetProperty(this.Target.name, false);
         }
 
+        public override double GetHValue(WorldModel m)
+        {
+            var mana = (int)m.GetProperty(Properties.MANA);
+
+            if (mana < 5)
+                return 0.3;
+
+            return 1.0;
+
+        }
+
 
     }
 }

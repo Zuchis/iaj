@@ -126,7 +126,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
 
 
-        private Reward Playout(WorldModel initialPlayoutState)
+        protected virtual Reward Playout(WorldModel initialPlayoutState)
         {
             int randomIndex;
 

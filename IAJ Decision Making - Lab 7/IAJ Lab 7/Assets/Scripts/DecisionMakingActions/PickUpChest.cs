@@ -50,5 +50,26 @@ namespace Assets.Scripts.DecisionMakingActions
             //disables the target object so that it can't be reused again
             worldModel.SetProperty(this.Target.name, false);
         }
+
+        public override double GetHValue(WorldModel m)
+        {
+            var hp = (int)m.GetProperty(Properties.HP);
+            var dragonAlive = (bool)m.GetProperty("Dragon");
+            var orc1Alive = (bool)m.GetProperty("Orc");
+            var orc2Alive = (bool)m.GetProperty("Orc (1)");
+
+            if (this.Target.name.Equals("Chest (4)") && dragonAlive && hp < 20)
+                return 1.0;
+
+            if (this.Target.name.Equals("Chest (1)") && orc2Alive && hp < 10)
+                return 1.0;
+
+            if (this.Target.name.Equals("Chest (2)") && orc1Alive && hp < 10)
+                return 1.0;
+
+            return 0.4;
+
+        }
+
     }
 }

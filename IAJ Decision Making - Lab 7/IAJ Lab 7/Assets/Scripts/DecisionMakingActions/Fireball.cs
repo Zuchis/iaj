@@ -80,5 +80,21 @@ namespace Assets.Scripts.DecisionMakingActions
                 worldModel.SetProperty(this.Target.name, false);
             }            
         }
+
+        public override double GetHValue(WorldModel m)
+        {
+            if (this.Target.tag.Equals("Dragon"))
+                return 100.0;
+
+            if (this.Target.tag.Equals("Orc"))
+                return 0.0;
+
+            if (this.Target.tag.Equals("Skeleton"))
+                return 0.5;
+
+            return 0.5;
+
+        }
+
     }
 }

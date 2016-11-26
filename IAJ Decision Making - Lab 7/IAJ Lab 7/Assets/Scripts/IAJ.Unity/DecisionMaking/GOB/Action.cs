@@ -56,5 +56,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         {
         }
 
+        public virtual double GetHValue(WorldModel m)
+        {
+            return 0.0;
+        }
+
     }
 }

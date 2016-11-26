@@ -75,5 +75,10 @@ namespace Assets.Scripts.DecisionMakingActions
             worldModel.SetProperty(Properties.POSITION, Target.transform.position);
         }
 
+        public override double GetHValue(WorldModel m)
+        {
+            return 0.0;
+        }
+
     }
 }
