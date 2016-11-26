@@ -114,14 +114,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 //this.CurrentIterations++;
                 this.CurrentIterationsInFrame++;
             }
-            GOB.Action a = this.BestChild(v0).Action;
-            if (!this.BestActionSequence.Contains(a))
+            if (!v0.State.IsTerminal()) //hack to display victory screen
             {
+                GOB.Action a = this.BestChild(v0).Action;
+                if (!this.BestActionSequence.Contains(a))
+                {
 
-                BestActionSequence.Add(a);
-                Debug.Log(BestActionSequence.Count);
+                    BestActionSequence.Add(a);
+                    Debug.Log(BestActionSequence.Count);
+                }
+                return a;
             }
-            return a; //this.initialNode or v0???
+            return null; //hack above ends
         }
 
 
