@@ -218,7 +218,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         private void Backpropagate(MCTSNode node, Reward reward)
         {
-            while (node.Parent != null)
+            while (node != null)
             {
                 node.N += 1;
                 node.Q += reward.GetRewardForNode(node);
@@ -243,6 +243,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             {
                 currentChild = children[i];
                 ui = currentChild.Q / currentChild.N;
+                if (ui != 0)
+                    Debug.Log("Ganhou");
                 uct = ui + C * Math.Sqrt(Math.Log(currentChild.Parent.N) / currentChild.N);
                 if (uct > bestUCT)
                 {

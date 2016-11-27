@@ -43,11 +43,12 @@ namespace Assets.Scripts.GameManager
 
             //Debug.Log(money);
 
-            if (money == 25)
-            {
-                return 1.0f;
-            }
-            else return 0.0f;
+            //if (money >= 10)
+            //{
+            //    return 1.0f;
+            //}
+            //else return 0.0f;
+            return (0.04f * (float)money);
         }
 
         public override int GetNextPlayer()
