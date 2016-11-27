@@ -27,7 +27,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 {
 
                     heuristicValue = actions[i].GetHValue(child);
-                    accumulatedHeuristicValue += Math.Pow(Mathf.Epsilon, -heuristicValue);
+                    accumulatedHeuristicValue += Math.Pow(Math.E, -heuristicValue);
                     actionIndexes[i] = accumulatedHeuristicValue;
                 }
                 
