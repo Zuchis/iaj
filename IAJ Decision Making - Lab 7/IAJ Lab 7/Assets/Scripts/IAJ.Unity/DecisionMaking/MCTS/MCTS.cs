@@ -63,27 +63,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             GOB.Action nextAction;
             MCTSNode currentNode = initialNode;
             MCTSNode previousNode;
-            MCTSNode bestChild;
-            GOB.Action[] actions = currentNode.State.GetExecutableActions();
-            List<GOB.Action> list = new List<GOB.Action>();
-            for(int i = 0; i < actions.Length; i++){ list.Add(actions[i]); }
-            while (currentNode != null && !currentNode.State.IsTerminal())
+            while (!currentNode.State.IsTerminal())
             {
-                int randomIndex = this.RandomGenerator.Next(list.Count);
-                //nextAction = currentNode.State.GetNextAction();
-                nextAction = list[randomIndex];
-                list.Remove(actions[randomIndex]);
+                nextAction = currentNode.State.GetNextAction();
                 
                 if (nextAction != null)
                 {
-                    //Debug.Log(nextAction);
                     return this.Expand(currentNode, nextAction);
                 }
                 else
                 {
                     previousNode = currentNode;
                     currentNode = BestUCTChild(currentNode);
-                    if (currentNode == null) return previousNode;   //FILTHY HACK
+                    //if (currentNode == null) return previousNode;   //FILTHY HACK
                 }
             }
             return currentNode;
@@ -93,12 +85,16 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         private MCTSNode Expand(MCTSNode parent, GOB.Action action)
         {
-            MCTSNode child = new MCTSNode(parent.State.GenerateChildWorldModel());
+            WorldModel state = parent.State.GenerateChildWorldModel();
+            MCTSNode child = new MCTSNode(state);
+
+            child.Parent = parent;
             action.ApplyActionEffects(child.State);
             child.State.CalculateNextPlayer();
-            child.Parent = parent;
+
             child.Action = action;
             parent.ChildNodes.Add(child);
+
             return child;
         }
 
@@ -121,18 +117,47 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.CurrentIterations++;
                 this.CurrentIterationsInFrame++;
             }
-            if (!v0.State.IsTerminal()) //hack to display victory screen
+            this.TotalProcessingTime = Time.realtimeSinceStartup - startTime;
+            if(this.CurrentIterations < this.MaxIterations)
             {
-                GOB.Action a = this.BestChild(v0).Action;
-                if (!this.BestActionSequence.Contains(a))
-                {
-
-                    BestActionSequence.Add(a);
-                    //Debug.Log(BestActionSequence.Count);
-                }
-                return a;
+                this.InProgress = false;
             }
-            return null; //hack above ends
+
+            this.BestFirstChild = this.BestChild(this.InitialNode);
+
+            this.BestActionSequence.Clear();
+
+            var auxNode = this.BestFirstChild;
+
+            while (true)
+            {
+                if (auxNode == null || auxNode.State.IsTerminal())
+                {
+                    break;
+                }
+                this.BestActionSequence.Add(auxNode.Action);
+                auxNode = BestChild(auxNode);
+            }
+
+            if (this.BestFirstChild == null)
+            {
+                return null;
+            }
+
+            return this.BestFirstChild.Action;
+
+            //if (!v0.State.IsTerminal()) //hack to display victory screen
+            //{
+            //    GOB.Action a = this.BestChild(v0).Action;
+            //    if (!this.BestActionSequence.Contains(a))
+            //    {
+
+            //        BestActionSequence.Add(a);
+            //        //Debug.Log(BestActionSequence.Count);
+            //    }
+            //    return a;
+            //}
+            //return null; //hack above ends
         }
 
 
@@ -140,18 +165,21 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected virtual Reward Playout(WorldModel initialPlayoutState)
         {
             int randomIndex;
-
+            GOB.Action action;
+            GOB.Action[] actions;
             WorldModel wm = initialPlayoutState.GenerateChildWorldModel();  //nao alterar estado inicial, fazer copia. De resto ta bom
             while (!wm.IsTerminal())
             {
-                GOB.Action[] actions = wm.GetExecutableActions();
-                randomIndex = this.RandomGenerator.Next(actions.Length);
-                GOB.Action randomAction = actions[randomIndex];
-                randomAction.ApplyActionEffects(wm);
+                actions = wm.GetExecutableActions();
+                if (actions.Length == 0)
+                    continue;
+                randomIndex = this.RandomGenerator.Next(0,actions.Length);
+                action = actions[randomIndex];
+                action.ApplyActionEffects(wm);
                 wm.CalculateNextPlayer();
             }
             Reward r = new Reward();
-            r.PlayerID = this.InitialNode.PlayerID;
+            r.PlayerID = wm.GetNextPlayer();
             r.Value = wm.GetScore();
             return r;
         }
@@ -193,7 +221,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (node.Parent != null)
             {
                 node.N += 1;
-                node.Q += reward.Value;
+                node.Q += reward.GetRewardForNode(node);
                 node = node.Parent;
             }
         }
@@ -204,24 +232,25 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //gets the best child of a node, using the UCT formula
         private MCTSNode BestUCTChild(MCTSNode node)
         {
-            float uctValue;
-            float childEstimatedValue;
-            float bestValue = float.MinValue;
-            float explorationFactor;
+            List<MCTSNode> children = node.ChildNodes;
+            MCTSNode best, currentChild;
+            float ui;
+            double uct;
+            double bestUCT = -1;
+            best = null;
             MCTSNode chosenChild = null;
-            foreach (var child in node.ChildNodes)
+            for (int i = 0; i < children.Count; i++)
             {
-                // value = child.Q / child.N + c * sqrt(log(n.N / child.N))
-                childEstimatedValue = child.Q / child.N;
-                explorationFactor = MCTS.C * Mathf.Sqrt((Mathf.Log(node.N) / Mathf.Log(Mathf.Epsilon)) / child.N);
-                uctValue = childEstimatedValue + explorationFactor;
-                if (uctValue > bestValue)
+                currentChild = children[i];
+                ui = currentChild.Q / currentChild.N;
+                uct = ui + C * Math.Sqrt(Math.Log(currentChild.Parent.N) / currentChild.N);
+                if (uct > bestUCT)
                 {
-                    bestValue = uctValue;
-                    chosenChild = child;
+                    bestUCT = uct;
+                    best = currentChild;
                 }
             }
-            return chosenChild;
+            return best;
         }
 
 
@@ -230,21 +259,25 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //the exploration factor
         private MCTSNode BestChild(MCTSNode node)
         {
-            float childEstimatedValue;
-            float bestValue = float.MinValue;
+            List<MCTSNode> children = node.ChildNodes;
+            MCTSNode best, currentChild;
+            float ui;
+            double uct;
+            double bestUCT = -1;
+            best = null;
             MCTSNode chosenChild = null;
-            foreach (var child in node.ChildNodes)
+            for (int i = 0; i < children.Count; i++)
             {
-                // value = child.Q / child.N 
-                childEstimatedValue = child.Q / child.N;
-                if (childEstimatedValue > bestValue)
+                currentChild = children[i];
+                ui = currentChild.Q / currentChild.N;
+                uct = ui + Math.Sqrt(Math.Log(currentChild.Parent.N) / currentChild.N);
+                if (uct > bestUCT)
                 {
-                    bestValue = childEstimatedValue;
-                    chosenChild = child;
+                    bestUCT = uct;
+                    best = currentChild;
                 }
             }
-            this.BestFirstChild = chosenChild;
-            return chosenChild;
+            return best;
         }
 
 
