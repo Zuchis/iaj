@@ -84,7 +84,7 @@ namespace Assets.Scripts.DecisionMakingActions
         public override double GetHValue(WorldModel m)
         {
             if (this.Target.tag.Equals("Dragon"))
-                return 1000.0;
+                return 100.0;
 
             if (this.Target.tag.Equals("Orc"))
                 return 0.0;

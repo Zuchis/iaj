@@ -78,20 +78,18 @@ namespace Assets.Scripts.DecisionMakingActions
             var level = (int)m.GetProperty(Properties.LEVEL);
 
             if (hp <= 5)
-                return 1000.0;
+                return 10.0;
 
             if (this.Target.tag.Equals("Skeleton"))
                 return 0.3;
 
             if (this.Target.tag.Equals("Orc") && hp <= 10)
-                return 1000.0;
+                return 10.0;
 
             if (this.Target.tag.Equals("Dragon") && hp <= 20)
-                return 1000.0; 
+                return 10.0; 
 
             return 0.0;
-
-            //if 
 
         }
     }

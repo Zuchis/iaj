@@ -51,7 +51,7 @@ namespace Assets.Scripts.DecisionMakingActions
             if (hp <= 20 && level > 2)
                 return 0.4;
 
-            return 1000.0;
+            return 100.0;
         }
 
     }
