@@ -116,12 +116,15 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.Backpropagate(v1, reward);
                 this.CurrentIterations++;
                 this.CurrentIterationsInFrame++;
-                this.TotalProcessingTime = Time.realtimeSinceStartup - startTime;
             }
-            if(this.CurrentIterations < this.MaxIterations)
+            if(this.CurrentIterations >= this.MaxIterations)
             {
                 this.InProgress = false;
             }
+
+            //Debug.Log(this.CurrentIterations);
+
+            this.TotalProcessingTime = Time.realtimeSinceStartup - startTime;
 
             this.BestFirstChild = this.BestChild(this.InitialNode);
 
@@ -146,18 +149,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             return this.BestFirstChild.Action;
 
-            //if (!v0.State.IsTerminal()) //hack to display victory screen
-            //{
-            //    GOB.Action a = this.BestChild(v0).Action;
-            //    if (!this.BestActionSequence.Contains(a))
-            //    {
-
-            //        BestActionSequence.Add(a);
-            //        //Debug.Log(BestActionSequence.Count);
-            //    }
-            //    return a;
-            //}
-            //return null; //hack above ends
         }
 
 
