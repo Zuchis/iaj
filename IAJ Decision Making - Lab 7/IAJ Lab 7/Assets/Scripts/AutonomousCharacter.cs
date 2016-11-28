@@ -270,7 +270,7 @@ namespace Assets.Scripts
             if (this.MCTSDecisionMaking.BestFirstChild != null)
             {
                 var q = this.MCTSDecisionMaking.BestFirstChild.Q / this.MCTSDecisionMaking.BestFirstChild.N;
-                this.BestDiscontentmentText.text = "Best Exp. Q value: " + q.ToString("F");
+                this.BestDiscontentmentText.text = "Best Exp. Q value: " + q.ToString("F") + "\n \n " + this.MCTSDecisionMaking.CurrentIterations.ToString("F");
                 var actionText = "";
                 foreach (var action in this.MCTSDecisionMaking.BestActionSequence)
                 {

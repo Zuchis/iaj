@@ -19,7 +19,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public List<GOB.Action> BestActionSequence { get; private set; }
 
 
-        protected int CurrentIterations { get; set; }
+        public int CurrentIterations { get; set; }
         protected int CurrentIterationsInFrame { get; set; }
         protected int CurrentDepth { get; set; }
 
@@ -116,8 +116,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.Backpropagate(v1, reward);
                 this.CurrentIterations++;
                 this.CurrentIterationsInFrame++;
+                this.TotalProcessingTime = Time.realtimeSinceStartup - startTime;
             }
-            this.TotalProcessingTime = Time.realtimeSinceStartup - startTime;
             if(this.CurrentIterations < this.MaxIterations)
             {
                 this.InProgress = false;
@@ -243,8 +243,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             {
                 currentChild = children[i];
                 ui = currentChild.Q / currentChild.N;
-                if (ui != 0)
-                    Debug.Log("Ganhou");
                 uct = ui + C * Math.Sqrt(Math.Log(currentChild.Parent.N) / currentChild.N);
                 if (uct > bestUCT)
                 {
